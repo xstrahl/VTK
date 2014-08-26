@@ -479,7 +479,7 @@ endif()
 
 vtk_module_library(vtkRenderingOpenGL ${Module_SRCS})
 vtk_module_link_libraries(vtkRenderingOpenGL
-  LINK_PUBLIC ${OPENGL_LIBRARIES} ${extra_libs})
+  LINK_PUBLIC ${extra_libs} ${OPENGL_LIBRARIES})
 if(VTK_USE_X)
   vtk_module_link_libraries(vtkRenderingOpenGL
     LINK_PUBLIC ${X11_LIBRARIES} ${X11_Xt_LIB})
