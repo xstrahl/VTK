@@ -143,7 +143,8 @@ int main(int argc,char *argv[])
     }
 
   /* extra object for the Common module */
-  if (strcmp(libName, "vtkCommonCorePython") == 0)
+  if (strcmp(libName, "vtkCommonCorePython") == 0 ||
+    strcmp(libName, "vtkCommonKitPython") == 0)
     {
     /* the PyVTKMutableObject */
     files[numFiles] = strdup("mutable");
