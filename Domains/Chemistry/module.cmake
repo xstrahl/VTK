@@ -3,8 +3,8 @@ if(VTK_RENDERING_BACKEND STREQUAL "OpenGL2")
 endif()
 
 vtk_module(vtkDomainsChemistry
-  GROUPS
-    StandAlone
+  #GROUPS
+  #  StandAlone
   DEPENDS
     vtkCommonDataModel
     vtkRenderingCore
