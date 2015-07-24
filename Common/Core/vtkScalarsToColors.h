@@ -398,10 +398,9 @@ protected:
   // Obsolete, kept so subclasses will still compile
   int UseMagnitude;
 
-  unsigned char RGBABytes[4];
-
 private:
   double RGB[3];
+  unsigned char RGBABytes[4];
   double InputRange[2];
 
   vtkScalarsToColors(const vtkScalarsToColors&);  // Not implemented.
