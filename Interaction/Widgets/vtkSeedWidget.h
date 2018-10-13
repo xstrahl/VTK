@@ -64,7 +64,7 @@
  * </pre>
  *
  * @sa
- * vtkHandleWidget vtkSeedRepresentation
+ * vtkHandleWidget vtkSeedReoresentation
 */
 
 #ifndef vtkSeedWidget_h
