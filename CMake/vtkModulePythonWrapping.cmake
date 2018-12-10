@@ -142,3 +142,8 @@ else(VTK_ENABLE_KITS)
     vtk_add_python_wrapping_library(${module} module_srcs ${module})
   endforeach()
 endif(VTK_ENABLE_KITS)
+
+vtk_module_load(vtkWrappingPythonCore)
+vtk_module_load(vtkPython)
+include_directories(${vtkWrappingPythonCore_INCLUDE_DIRS}
+  ${vtkPython_INCLUDE_DIRS})

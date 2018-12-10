@@ -42,3 +42,7 @@ configure_file(
   "${CMAKE_BINARY_DIR}/OpenVRDashboard.jpg"
   COPYONLY
   )
+
+if(VTK_WRAP_PYTHON AND NOT VTK_SOURCE_DIR)
+  include(vtkModulePythonWrapping)
+endif()

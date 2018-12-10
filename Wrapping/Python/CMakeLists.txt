@@ -28,13 +28,9 @@ option(VTK_ENABLE_VTKPYTHON "Enable vtkpython and pvtkpython binaries" ON)
 mark_as_advanced(VTK_ENABLE_VTKPYTHON)
 if(VTK_ENABLE_VTKPYTHON)
 
-vtk_module_load(vtkWrappingPythonCore)
-vtk_module_load(vtkPython)
 vtk_module_load(vtkPythonInterpreter)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
-  ${VTK_SOURCE_DIR}/Utilities
-  ${vtkPython_INCLUDE_DIRS}
-  ${vtkWrappingPythonCore_INCLUDE_DIRS})
+  ${VTK_SOURCE_DIR}/Utilities)
 
 if(UNIX)
   find_library(PYTHON_UTIL_LIBRARY

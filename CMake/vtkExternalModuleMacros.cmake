@@ -12,6 +12,7 @@ endif()
 
 include(${VTK_CMAKE_DIR}/vtkDirectories.cmake)
 include(${VTK_CMAKE_DIR}/vtkInitializeBuildType.cmake)
+include(${VTK_CMAKE_DIR}/vtkInitializeWrapPython.cmake)
 
 # Use VTK's flags.
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${VTK_REQUIRED_C_FLAGS}")
@@ -30,7 +31,9 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${VTK_MODULES_DIR})
 
 
+include(vtkEncodeString)
 include(vtkModuleMacros)
+include(vtkObjectFactory)
 include(module.cmake OPTIONAL RESULT_VARIABLE _found)
 if(_found)
   set(${vtk-module}-targets ${vtk-module}Targets)
