@@ -56,7 +56,7 @@ macro(vtk_module_load mod)
     # than VTKTargets.cmake are created when modules are built externally. Do not
     # include the targets file inside the module itself -- which occurs in a module's
     # test configuration.
-    if(EXISTS "${${mod}_TARGETS_FILE}" AND NOT vtk-module STREQUAL mod)
+    if(EXISTS "${${mod}_TARGETS_FILE}" AND NOT vtk-module STREQUAL "${mod}")
       include("${${mod}_TARGETS_FILE}")
     endif()
   endif()
