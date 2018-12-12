@@ -1,16 +1,5 @@
 include(vtkInitializeWrapPython)
 
-# Export location of python module dirs in install and build tree for every vtkpython module to use
-# As long as those modules depend on vtkpython, they can retrieve and use these
-if(NOT VTK_PYTHON_SITE_PACKAGES_SUFFIX)
-  if(WIN32 AND NOT CYGWIN)
-    set(VTK_PYTHON_SITE_PACKAGES_SUFFIX "Lib/site-packages")
-  else()
-    set(VTK_PYTHON_SITE_PACKAGES_SUFFIX
-      "python${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}/site-packages")
-  endif()
-endif()
-
 set(${vtk-module}_LIBRARIES ${VTK_PYTHON_LIBRARIES})
 set(${vtk-module}_SYSTEM_INCLUDE_DIRS "${PYTHON_INCLUDE_DIRS}")
 set(${vtk-module}_NO_Header_Test 1)
