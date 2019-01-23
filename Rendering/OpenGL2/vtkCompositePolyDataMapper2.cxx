@@ -39,6 +39,7 @@
 #include "vtkOpenGLTexture.h"
 #include "vtkOpenGLVertexBufferObject.h"
 #include "vtkOpenGLVertexBufferObjectGroup.h"
+#include "vtkOpenGLShaderProperty.h"
 #include "vtkPointData.h"
 #include "vtkPolyData.h"
 #include "vtkProperty.h"
@@ -152,6 +153,28 @@ void vtkCompositeMapperHelper2::SetShaderValues(
     {
       prog->SetUniformi("OverridesColor", hdata->OverridesColor);
     }
+  }
+}
+
+void vtkCompositeMapperHelper2::UpdateShaders(
+  vtkOpenGLHelper &cellBO, vtkRenderer *ren, vtkActor *act)
+{
+#ifndef VTK_LEGACY_REMOVE
+  // in cases where LegacyShaderProperty is not nullptr, it means someone has used
+  // legacy shader replacement functions, so we make sure the actor uses the same
+  // shader property. NOTE: this implies that it is not possible to use both legacy
+  // and new functionality on the same actor/mapper.
+  if( this->Parent->LegacyShaderProperty && act->GetShaderProperty() != this->Parent->LegacyShaderProperty )
+  {
+    act->SetShaderProperty( this->Parent->LegacyShaderProperty );
+  }
+#endif
+
+  Superclass::UpdateShaders(cellBO, ren, act);
+  if (cellBO.Program && this->Parent)
+  {
+    // allow the program to set what it wants
+    this->Parent->InvokeEvent(vtkCommand::UpdateShaderEvent, cellBO.Program);
   }
 }
 
@@ -1669,19 +1692,7 @@ void vtkCompositePolyDataMapper2::CopyMapperValuesToHelper(vtkCompositeMapperHel
   helper->SetCompositeIdArrayName(this->GetCompositeIdArrayName());
   helper->SetProcessIdArrayName(this->GetProcessIdArrayName());
   helper->SetCellIdArrayName(this->GetCellIdArrayName());
-  helper->SetVertexShaderCode(this->GetVertexShaderCode());
-  helper->SetGeometryShaderCode(this->GetGeometryShaderCode());
-  helper->SetFragmentShaderCode(this->GetFragmentShaderCode());
   helper->SetStatic(1);
-  helper->ClearAllShaderReplacements();
-  for (auto& repl : this->UserShaderReplacements)
-  {
-    const vtkShader::ReplacementSpec& spec = repl.first;
-    const vtkShader::ReplacementValue& values = repl.second;
-
-    helper->AddShaderReplacement(spec.ShaderType, spec.OriginalValue, spec.ReplaceFirst,
-      values.Replacement, values.ReplaceAll);
-  }
 }
 
 //-----------------------------------------------------------------------------
