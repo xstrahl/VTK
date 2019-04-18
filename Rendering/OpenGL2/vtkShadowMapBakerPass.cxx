@@ -433,6 +433,10 @@ void vtkShadowMapBakerPass::Render(const vtkRenderState *s)
       while ((prop = props->GetNextProp(cookie)) != nullptr)
       {
         const double* bounds = prop->GetBounds();
+        if (!bounds)
+        {
+          continue;
+        }
         if (first)
         {
           bb[0] = bounds[0];
