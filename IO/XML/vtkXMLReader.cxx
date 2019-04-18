@@ -961,7 +961,7 @@ void vtkXMLReader::ReadFieldData()
 {
   if (this->FieldDataElement) // read the field data information
   {
-    int numTuples;
+    vtkIdType numTuples;
     vtkFieldData *fieldData = this->GetCurrentOutput()->GetFieldData();
     for (int i = 0; i < this->FieldDataElement->GetNumberOfNestedElements() &&
              !this->AbortExecute; i++)
@@ -1575,7 +1575,7 @@ void vtkXMLReader::SetDataArraySelections(
 
 //----------------------------------------------------------------------------
 int vtkXMLReader::SetFieldDataInfo(vtkXMLDataElement *eDSA,
-  int association, int numTuples, vtkInformationVector *(&infoVector))
+  int association, vtkIdType numTuples, vtkInformationVector *(&infoVector))
 {
   if (!eDSA)
   {
