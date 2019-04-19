@@ -52,6 +52,8 @@ vtk_add_test_cxx(vtkRenderingOpenGL2CxxTests tests
   TestVBOPointsLines.cxx
   TestValuePass.cxx
   TestValuePass2.cxx
+  TestCubeMap2.cxx
+  UnitTestOpenGLUniforms.cxx,NO_DATA,NO_VALID,NO_OUTPUT
   )
 
 vtk_add_test_cxx(vtkRenderingOpenGL2CxxTests tests
