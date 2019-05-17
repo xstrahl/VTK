@@ -14,6 +14,9 @@ set(QVTKLibSrcs
   vtkQtDebugLeaksView.cxx
   vtkQtTableModelAdapter.cxx
   vtkQtTreeModelAdapter.cxx
+  vtkQWidgetRepresentation.cxx
+  vtkQWidgetTexture.cxx
+  vtkQWidgetWidget.cxx
   QVTKOpenGLNativeWidget.cxx
   QVTKOpenGLWidget.cxx
   QVTKOpenGLWindow.cxx
@@ -60,6 +63,9 @@ endif()
 set(QVTKNonMocHeaders
   QVTKWin32Header.h
   vtkEventQtSlotConnect.h
+  vtkQWidgetRepresentation.h
+  vtkQWidgetTexture.h
+  vtkQWidgetWidget.h
   QVTKInteractor.h
   )
 

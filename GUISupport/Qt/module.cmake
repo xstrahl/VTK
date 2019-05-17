@@ -7,6 +7,7 @@ vtk_module(vtkGUISupportQt
   EXCLUDE_FROM_WRAPPING
   DEPENDS
     vtkCommonCore
+    vtkInteractionWidgets
     vtkRenderingOpenGL2
     vtkRenderingCore
   PRIVATE_DEPENDS
