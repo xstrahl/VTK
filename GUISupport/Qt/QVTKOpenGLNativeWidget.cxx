@@ -554,7 +554,7 @@ void QVTKOpenGLNativeWidget::paintGL()
     f->glReadBuffer(GL_COLOR_ATTACHMENT0);
 
     // The viewport state may be modified outside the vtkOpenGLState mechanism, so reset the state here.
-    ostate->ResetGlViewportState();
+    ostate->ResetGLViewportState();
 
     // If you get a vtkOpenGLState warning from the call below, you can add
     // a call to ostate->ResetEnumState(GL_SCISSOR_TEST); to reset the cache state

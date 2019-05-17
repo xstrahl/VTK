@@ -266,7 +266,7 @@ void QVTKOpenGLWindow::MakeCurrent()
   // For reference, see QCocoaWindow::initialize().
 #ifdef __APPLE__
   vtkOpenGLState *ostate = this->RenderWindow->GetState();
-  ostate->ResetGlViewportState();
+  ostate->ResetGLViewportState();
 #endif
 
 }

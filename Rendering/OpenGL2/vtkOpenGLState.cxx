@@ -93,6 +93,7 @@ void vtkOpenGLState::CheckState()
   if (params[0] != this->CurrentState.DepthMask)
   {
     vtkGenericWarningMacro("Error in cache state for GL_DEPTH_WRITEMASK");
+    this->ResetGLDepthMaskState();
     error = true;
   }
   ::glGetBooleanv(GL_COLOR_WRITEMASK, params);
@@ -104,24 +105,28 @@ void vtkOpenGLState::CheckState()
       )
   {
     vtkGenericWarningMacro("Error in cache state for GL_COLOR_WRITEMASK");
+    this->ResetGLColorMaskState();
     error = true;
   }
   ::glGetBooleanv(GL_BLEND, params);
   if ((params[0] != 0) != this->CurrentState.Blend)
   {
     vtkGenericWarningMacro("Error in cache state for GL_BLEND");
+    this->ResetEnumState(GL_BLEND);
     error = true;
   }
   ::glGetBooleanv(GL_DEPTH_TEST, params);
   if ((params[0] != 0) != this->CurrentState.DepthTest)
   {
     vtkGenericWarningMacro("Error in cache state for GL_DEPTH_TEST");
+    this->ResetEnumState(GL_DEPTH_TEST);
     error = true;
   }
   ::glGetBooleanv(GL_CULL_FACE, params);
   if ((params[0] != 0) != this->CurrentState.CullFace)
   {
     vtkGenericWarningMacro("Error in cache state for GL_CULL_FACE");
+    this->ResetEnumState(GL_CULL_FACE);
     error = true;
   }
 #ifdef GL_MULTISAMPLE
@@ -129,6 +134,7 @@ void vtkOpenGLState::CheckState()
   if ((params[0] != 0) != this->CurrentState.MultiSample)
   {
     vtkGenericWarningMacro("Error in cache state for GL_MULTISAMPLE");
+    this->ResetEnumState(GL_MULTISAMPLE);
     error = true;
   }
 #endif
@@ -136,12 +142,14 @@ void vtkOpenGLState::CheckState()
   if ((params[0] != 0) != this->CurrentState.ScissorTest)
   {
     vtkGenericWarningMacro("Error in cache state for GL_SCISSOR_TEST");
+    this->ResetEnumState(GL_SCISSOR_TEST);
     error = true;
   }
   ::glGetBooleanv(GL_STENCIL_TEST, params);
   if ((params[0] != 0) != this->CurrentState.StencilTest)
   {
     vtkGenericWarningMacro("Error in cache state for GL_STENCIL_TEST");
+    this->ResetEnumState(GL_STENCIL_TEST);
     error = true;
   }
 
@@ -149,7 +157,7 @@ void vtkOpenGLState::CheckState()
 #if defined(__APPLE__)
   // OSX systems seem to change the glViewport upon a window resize
   // under the hood, so our viewport cache cannot be trusted
-  this->ResetGlViewportState();
+  this->ResetGLViewportState();
 #endif
   ::glGetIntegerv(GL_VIEWPORT, iparams);
   if (
@@ -160,6 +168,7 @@ void vtkOpenGLState::CheckState()
       )
   {
     vtkGenericWarningMacro("Error in cache state for GL_VIEWPORT");
+    this->ResetGLViewportState();
     error = true;
   }
   ::glGetIntegerv(GL_SCISSOR_BOX, iparams);
@@ -171,42 +180,49 @@ void vtkOpenGLState::CheckState()
       )
   {
     vtkGenericWarningMacro("Error in cache state for GL_SCISSOR_BOX");
+    this->ResetGLScissorState();
     error = true;
   }
   ::glGetIntegerv(GL_CULL_FACE_MODE, iparams);
   if (iparams[0] != static_cast<int>(this->CurrentState.CullFaceMode))
   {
     vtkGenericWarningMacro("Error in cache state for GL_CULL_FACE_MODE");
+    this->ResetGLCullFaceState();
     error = true;
   }
   ::glGetIntegerv(GL_DEPTH_FUNC, iparams);
   if (iparams[0] != static_cast<int>(this->CurrentState.DepthFunc))
   {
     vtkGenericWarningMacro("Error in cache state for GL_DEPTH_FUNC");
+    this->ResetGLDepthFuncState();
     error = true;
   }
   ::glGetIntegerv(GL_BLEND_SRC_RGB, iparams);
   if (iparams[0] != static_cast<int>(this->CurrentState.BlendFunc[0]))
   {
     vtkGenericWarningMacro("Error in cache state for GL_BLEND_SRC_RGB");
+    this->ResetGLBlendFuncState();
     error = true;
   }
   ::glGetIntegerv(GL_BLEND_SRC_ALPHA, iparams);
   if (iparams[0] != static_cast<int>(this->CurrentState.BlendFunc[2]))
   {
     vtkGenericWarningMacro("Error in cache state for GL_BLEND_SRC_ALPHA");
+    this->ResetGLBlendFuncState();
     error = true;
   }
   ::glGetIntegerv(GL_BLEND_DST_RGB, iparams);
   if (iparams[0] != static_cast<int>(this->CurrentState.BlendFunc[1]))
   {
     vtkGenericWarningMacro("Error in cache state for GL_BLEND_DST_RGB");
+    this->ResetGLBlendFuncState();
     error = true;
   }
   ::glGetIntegerv(GL_BLEND_DST_ALPHA, iparams);
   if (iparams[0] != static_cast<int>(this->CurrentState.BlendFunc[3]))
   {
     vtkGenericWarningMacro("Error in cache state for GL_BLEND_DST_ALPHA");
+    this->ResetGLBlendFuncState();
     error = true;
   }
 
@@ -220,6 +236,7 @@ void vtkOpenGLState::CheckState()
       )
   {
     vtkGenericWarningMacro("Error in cache state for GL_COLOR_CLEAR_VALUE");
+    this->ResetGLClearColorState();
     error = true;
   }
 
@@ -403,6 +420,8 @@ void vtkOpenGLState::vtkglClearDepth(double val)
 
 void vtkOpenGLState::vtkglDepthFunc(GLenum val)
 {
+  vtkOpenGLCheckStateMacro();
+
 #ifndef NO_CACHE
   if (this->CurrentState.DepthFunc != val)
 #endif
@@ -895,7 +914,7 @@ void vtkOpenGLState::Initialize(vtkOpenGLRenderWindow *)
     &this->CurrentState.MinorVersion);
 }
 
-void vtkOpenGLState::ResetGlClearColorState()
+void vtkOpenGLState::ResetGLClearColorState()
 {
   GLfloat fparams[4];
   ::glGetFloatv(GL_COLOR_CLEAR_VALUE, fparams);
@@ -905,28 +924,28 @@ void vtkOpenGLState::ResetGlClearColorState()
   this->CurrentState.ClearColor[3] = fparams[3];
 }
 
-void vtkOpenGLState::ResetGlClearDepthState()
+void vtkOpenGLState::ResetGLClearDepthState()
 {
   GLfloat fparams;
   ::glGetFloatv(GL_DEPTH_CLEAR_VALUE, &fparams);
   this->CurrentState.ClearDepth = fparams;
 }
 
-void vtkOpenGLState::ResetGlDepthFuncState()
+void vtkOpenGLState::ResetGLDepthFuncState()
 {
   GLint iparams;
   ::glGetIntegerv(GL_DEPTH_FUNC, &iparams);
   this->CurrentState.DepthFunc = static_cast<unsigned int>(iparams);
 }
 
-void vtkOpenGLState::ResetGlDepthMaskState()
+void vtkOpenGLState::ResetGLDepthMaskState()
 {
   GLboolean params;
   ::glGetBooleanv(GL_DEPTH_WRITEMASK, &params);
   this->CurrentState.DepthMask = params;
 }
 
-void vtkOpenGLState::ResetGlColorMaskState()
+void vtkOpenGLState::ResetGLColorMaskState()
 {
   GLboolean params[4];
   ::glGetBooleanv(GL_COLOR_WRITEMASK, params);
@@ -937,7 +956,7 @@ void vtkOpenGLState::ResetGlColorMaskState()
 
 }
 
-void vtkOpenGLState::ResetGlViewportState()
+void vtkOpenGLState::ResetGLViewportState()
 {
   GLint iparams[4];
   ::glGetIntegerv(GL_VIEWPORT, iparams);
@@ -947,7 +966,7 @@ void vtkOpenGLState::ResetGlViewportState()
   this->CurrentState.Viewport[3] = iparams[3];
 }
 
-void vtkOpenGLState::ResetGlScissorState()
+void vtkOpenGLState::ResetGLScissorState()
 {
   GLint iparams[4];
   ::glGetIntegerv(GL_SCISSOR_BOX, iparams);
@@ -957,7 +976,7 @@ void vtkOpenGLState::ResetGlScissorState()
   this->CurrentState.Scissor[3] = iparams[3];
 }
 
-void vtkOpenGLState::ResetGlBlendFuncState()
+void vtkOpenGLState::ResetGLBlendFuncState()
 {
   GLint iparams;
   ::glGetIntegerv(GL_BLEND_SRC_RGB, &iparams);
@@ -970,7 +989,7 @@ void vtkOpenGLState::ResetGlBlendFuncState()
   this->CurrentState.BlendFunc[3] = static_cast<unsigned int>(iparams);
 }
 
-void vtkOpenGLState::ResetGlBlendEquationState()
+void vtkOpenGLState::ResetGLBlendEquationState()
 {
   GLint iparams;
   ::glGetIntegerv(GL_BLEND_EQUATION_RGB, &iparams);
@@ -979,7 +998,7 @@ void vtkOpenGLState::ResetGlBlendEquationState()
   this->CurrentState.BlendEquationValue2 = static_cast<unsigned int>(iparams);
 }
 
-void vtkOpenGLState::ResetGlCullFaceState()
+void vtkOpenGLState::ResetGLCullFaceState()
 {
   GLint iparams;
   ::glGetIntegerv(GL_CULL_FACE_MODE, &iparams);
