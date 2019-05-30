@@ -106,6 +106,7 @@ vtk_module_library(${vtk-module}
   ${QVTKLibSrcs} ${QVTKLibMocSrcs}
   ${QVTKNonMocHeaders} ${QVTKMocHeaders}
   )
+vtk_opengl_link(${vtk-module})
 
 vtk_module_link_libraries(${vtk-module} LINK_PUBLIC ${QT_LIBRARIES})
 if(QT_LIBRARIES_PRIVATE)
